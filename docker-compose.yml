@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  windows:
+    image: dockur/windows
+    container_name: windows11-vps
+    environment:
+      # إصدار الويندوز: win11 (أو win11e للنسخة المخففة Enterprise)
+      VERSION: "win11"
+      # حجم الرام المخصص للويندوز (مثلاً 4G أو 8G)
+      RAM_SIZE: "6G"
+      # عدد الأنوية المخصصة (مثلاً 2 أو 4)
+      CPU_CORES: "4"
+      # حجم القرص التخزيني
+      DISK_SIZE: "64G"
+      # لغة النظام (English أو أي لغة أخرى)
+      LANGUAGE: "en-US"
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "8006:8006" # منفذ واجهة الويب (VNC عبر المتصفح)
+      - "3389:3389/tcp" # منفذ سطح المكتب البعيد RDP
+      - "3389:3389/udp"
+    volumes:
+      - ./win_data:/storage
+    restart: always
