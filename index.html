@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows 11 Web VPS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- سطح المكتب -->
+  <div id="desktop">
+    <!-- أيقونات سطح المكتب -->
+    <div class="desktop-icons">
+      <div class="desktop-icon" ondblclick="openApp('files')">
+        <i class="fa-solid fa-folder-open folder-icon"></i>
+        <span>مدير الملفات والرفع</span>
+      </div>
+      <div class="desktop-icon" ondblclick="openApp('terminal')">
+        <i class="fa-solid fa-terminal terminal-icon"></i>
+        <span>موجه الأوامر CMD</span>
+      </div>
+      <div class="desktop-icon" ondblclick="openApp('browser')">
+        <i class="fa-brands fa-edge edge-icon"></i>
+        <span>متصفح Edge</span>
+      </div>
+      <div class="desktop-icon" ondblclick="openApp('notepad')">
+        <i class="fa-solid fa-file-lines notepad-icon"></i>
+        <span>المفكرة Notepad</span>
+      </div>
+      <div class="desktop-icon" ondblclick="openApp('rdp')">
+        <i class="fa-solid fa-desktop rdp-icon"></i>
+        <span>اتصال RDP عن بعد</span>
+      </div>
+      <div class="desktop-icon" ondblclick="openApp('sysinfo')">
+        <i class="fa-solid fa-circle-info info-icon"></i>
+        <span>معلومات النظام</span>
+      </div>
+    </div>
+
+    <!-- نافذة مدير الملفات والرفع -->
+    <div id="window-files" class="window" style="display: none;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-solid fa-folder-open"></i> مدير الملفات ورفع البرامج (Upload Center)</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('files')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('files')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('files')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="file-uploader-box">
+          <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFileUpload(event)">
+          <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <h3>اسحب الملفات والبرامج هنا أو اضغط للاختيار</h3>
+            <p>يدعم رفع التطبيقات، السكربتات، والملفات المضغوطة (ZIP, EXE, PDF, TXT)</p>
+          </div>
+        </div>
+        <div class="file-list-section">
+          <h4>الملفات المرفوعة على النظام:</h4>
+          <ul id="uploadedFilesList" class="file-list">
+            <li class="empty-msg">لا توجد ملفات مرفوعة حالياً. ابدأ برفع برامجك الآن!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة موجه الأوامر Terminal -->
+    <div id="window-terminal" class="window" style="display: none;">
+      <div class="window-header terminal-head">
+        <div class="window-title"><i class="fa-solid fa-terminal"></i> Windows PowerShell / Command Prompt</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('terminal')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('terminal')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('terminal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="window-body terminal-body" id="terminalOutput">
+        <div>Windows PowerShell (Cloud Web Edition)</div>
+        <div>(c) Microsoft Corporation. All rights reserved.</div>
+        <div style="color: #61afef; margin-top: 5px;">اكتب 'help' لعرض الأوامر المتاحة أو 'speedtest' لفحص السرعة.</div>
+        <br>
+        <div class="terminal-line" id="currentTerminalLine">
+          <span>PS C:\Users\Administrator&gt; </span>
+          <input type="text" id="terminalInput" autofocus onkeydown="handleTerminalCommand(event)">
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة متصفح Edge -->
+    <div id="window-browser" class="window" style="display: none;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-brands fa-edge"></i> Microsoft Edge</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('browser')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('browser')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('browser')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="browser-bar">
+        <button onclick="history.back()"><i class="fa-solid fa-arrow-right"></i></button>
+        <button onclick="history.forward()"><i class="fa-solid fa-arrow-left"></i></button>
+        <button onclick="document.getElementById('browserFrame').src = document.getElementById('browserUrl').value"><i class="fa-solid fa-rotate-right"></i></button>
+        <input type="text" id="browserUrl" value="https://www.bing.com">
+        <button class="go-btn" onclick="document.getElementById('browserFrame').src = document.getElementById('browserUrl').value">انتقال</button>
+      </div>
+      <div class="window-body browser-body">
+        <iframe id="browserFrame" src="https://www.bing.com"></iframe>
+      </div>
+    </div>
+
+    <!-- نافذة المفكرة Notepad -->
+    <div id="window-notepad" class="window" style="display: none;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-solid fa-file-lines"></i> المفكرة - Notepad</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('notepad')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('notepad')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('notepad')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="window-body notepad-body">
+        <textarea id="notepadText" placeholder="اكتب أو الصق النصوص والأكواد هنا..."></textarea>
+      </div>
+    </div>
+
+    <!-- نافذة اتصال RDP عن بعد -->
+    <div id="window-rdp" class="window" style="display: none;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-solid fa-desktop"></i> Remote Desktop Connection (RDP Gateway)</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('rdp')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('rdp')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('rdp')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="window-body rdp-body">
+        <div class="rdp-form">
+          <div class="form-group">
+            <label>عنوان خادم VPS (IP Address / Host):</label>
+            <input type="text" id="rdpIp" placeholder="مثال: 192.168.1.100 أو vps.example.com">
+          </div>
+          <div class="form-group">
+            <label>اسم المستخدم:</label>
+            <input type="text" id="rdpUser" value="Administrator">
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور:</label>
+            <input type="password" id="rdpPass" placeholder="كلمة مرور الـ VPS">
+          </div>
+          <button class="btn-primary" onclick="connectRdp()">اتصال بالسيرفر الآن</button>
+          <p class="rdp-note"><i class="fa-solid fa-shield-halved"></i> يتيح لك هذا المنفذ الاتصال الآمن بأي سيرفر Windows VPS خارجي مباشرة من متصفحك عبر Vercel.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة معلومات النظام -->
+    <div id="window-sysinfo" class="window" style="display: none;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-solid fa-circle-info"></i> معلومات Windows 11 Cloud VPS</div>
+        <div class="window-controls">
+          <button onclick="minimizeApp('sysinfo')"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="maximizeApp('sysinfo')"><i class="fa-regular fa-square"></i></button>
+          <button class="close-btn" onclick="closeApp('sysinfo')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="window-body sysinfo-body">
+        <h3>مواصفات بيئة التشغيل السحابية (Vercel Edition):</h3>
+        <table>
+          <tr><td>نظام التشغيل:</td><td>Windows 11 Pro Cloud Edition</td></tr>
+          <tr><td>الاستضافة:</td><td>Vercel Edge Platform (Serverless Web Engine)</td></tr>
+          <tr><td>منفذ النقل الافتراضي:</td><td>HTTPS / WebSocket Secure</td></tr>
+          <tr><td>سرعة الاتصال التقديرية:</td><td>~150 - 300 Mbps (CDN Edge Acceleration)</td></tr>
+          <tr><td>حالة النظام:</td><td><span class="status-online">متصل وجاهز للعمل</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- قائمة ابدأ Start Menu -->
+    <div id="startMenu" class="start-menu" style="display: none;">
+      <div class="start-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="اكتب هنا للبحث...">
+      </div>
+      <div class="start-section-title">التطبيقات المثبتة</div>
+      <div class="start-grid">
+        <div class="start-app" onclick="openApp('files'); toggleStartMenu();">
+          <i class="fa-solid fa-folder-open folder-icon"></i>
+          <span>رفع الملفات</span>
+        </div>
+        <div class="start-app" onclick="openApp('terminal'); toggleStartMenu();">
+          <i class="fa-solid fa-terminal terminal-icon"></i>
+          <span>PowerShell</span>
+        </div>
+        <div class="start-app" onclick="openApp('browser'); toggleStartMenu();">
+          <i class="fa-brands fa-edge edge-icon"></i>
+          <span>Edge</span>
+        </div>
+        <div class="start-app" onclick="openApp('notepad'); toggleStartMenu();">
+          <i class="fa-solid fa-file-lines notepad-icon"></i>
+          <span>Notepad</span>
+        </div>
+        <div class="start-app" onclick="openApp('rdp'); toggleStartMenu();">
+          <i class="fa-solid fa-desktop rdp-icon"></i>
+          <span>RDP Client</span>
+        </div>
+        <div class="start-app" onclick="openApp('sysinfo'); toggleStartMenu();">
+          <i class="fa-solid fa-circle-info info-icon"></i>
+          <span>الإعدادات</span>
+        </div>
+      </div>
+      <div class="start-footer">
+        <div class="user-profile">
+          <i class="fa-solid fa-user-tie"></i>
+          <span>Administrator</span>
+        </div>
+        <button class="power-btn" onclick="alert('سيرفر الويب السحابي نشط دائماً على مدار 24/7.')"><i class="fa-solid fa-power-off"></i></button>
+      </div>
+    </div>
+
+    <!-- شريط المهام Taskbar -->
+    <div id="taskbar">
+      <div class="taskbar-center">
+        <button class="taskbar-btn" id="startBtn" onclick="toggleStartMenu()">
+          <i class="fa-brands fa-windows win-logo"></i>
+        </button>
+        <button class="taskbar-btn" onclick="openApp('files')">
+          <i class="fa-solid fa-folder-open folder-icon"></i>
+        </button>
+        <button class="taskbar-btn" onclick="openApp('terminal')">
+          <i class="fa-solid fa-terminal terminal-icon"></i>
+        </button>
+        <button class="taskbar-btn" onclick="openApp('browser')">
+          <i class="fa-brands fa-edge edge-icon"></i>
+        </button>
+        <button class="taskbar-btn" onclick="openApp('notepad')">
+          <i class="fa-solid fa-file-lines notepad-icon"></i>
+        </button>
+        <button class="taskbar-btn" onclick="openApp('rdp')">
+          <i class="fa-solid fa-desktop rdp-icon"></i>
+        </button>
+      </div>
+      <div class="taskbar-tray">
+        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-volume-high"></i>
+        <i class="fa-solid fa-battery-full"></i>
+        <div class="clock" id="taskbarClock">08:50</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
