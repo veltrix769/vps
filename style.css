@@ -15,7 +15,7 @@ body, html {
 #desktop {
   width: 100vw;
   height: 100vh;
-  background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+  background: radial-gradient(circle at 50% 50%, #1e528e 0%, #0c2340 50%, #061120 100%), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -291,6 +291,40 @@ body, html {
   border-radius: 12px;
 }
 
+.browser-bar button.external-btn {
+  background: #107c10;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.browser-quick-links {
+  display: flex;
+  gap: 10px;
+  padding: 6px 15px;
+  background: #eaeaea;
+  border-bottom: 1px solid #ddd;
+  font-size: 11px;
+}
+
+.browser-quick-links span {
+  background: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.browser-quick-links span:hover {
+  background: #0078d4;
+  color: white;
+}
+
 .browser-body {
   padding: 0;
 }
@@ -539,4 +573,104 @@ body, html {
 .clock {
   font-size: 12px;
   font-weight: 500;
+}
+
+.notepad-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 6px 15px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+.notepad-toolbar button {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.notepad-toolbar button:hover {
+  background: #0078d4;
+  color: white;
+}
+
+.small-btn {
+  background: #fdf2f2;
+  color: #d93025;
+  border: 1px solid #f9d2d2;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.small-btn:hover {
+  background: #d93025;
+  color: white;
+}
+
+.rdp-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.rdp-tab {
+  flex: 1;
+  padding: 8px 5px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+}
+
+.rdp-tab.active {
+  color: #0078d4;
+  border-bottom-color: #0078d4;
+  font-weight: bold;
+}
+
+.demo-box {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.demo-icon {
+  font-size: 44px;
+  color: #0078d4;
+  margin-bottom: 10px;
+}
+
+.demo-box h3 {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.demo-box p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.session-stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  background: #f4fbf5;
+  border: 1px solid #c7eed0;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-size: 13px;
 }

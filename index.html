@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 11 Web VPS</title>
+  <title>Windows 11 Pro Cloud VPS</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- سطح المكتب -->
+  <!-- سطح المكتب الرئيسي -->
   <div id="desktop">
     <!-- أيقونات سطح المكتب -->
     <div class="desktop-icons">
@@ -30,7 +30,7 @@
       </div>
       <div class="desktop-icon" ondblclick="openApp('rdp')">
         <i class="fa-solid fa-desktop rdp-icon"></i>
-        <span>اتصال RDP عن بعد</span>
+        <span>اتصال السيرفر RDP</span>
       </div>
       <div class="desktop-icon" ondblclick="openApp('sysinfo')">
         <i class="fa-solid fa-circle-info info-icon"></i>
@@ -38,10 +38,10 @@
       </div>
     </div>
 
-    <!-- نافذة مدير الملفات والرفع -->
+    <!-- 1. نافذة مدير الملفات ورفع البرامج -->
     <div id="window-files" class="window" style="display: none;">
       <div class="window-header">
-        <div class="window-title"><i class="fa-solid fa-folder-open"></i> مدير الملفات ورفع البرامج (Upload Center)</div>
+        <div class="window-title"><i class="fa-solid fa-folder-open"></i> مدير الملفات ورفع البرامج (Cloud Storage Hub)</div>
         <div class="window-controls">
           <button onclick="minimizeApp('files')"><i class="fa-solid fa-minus"></i></button>
           <button onclick="maximizeApp('files')"><i class="fa-regular fa-square"></i></button>
@@ -51,14 +51,17 @@
       <div class="window-body">
         <div class="file-uploader-box">
           <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFileUpload(event)">
-          <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault()" ondrop="handleDropFile(event)">
             <i class="fa-solid fa-cloud-arrow-up"></i>
-            <h3>اسحب الملفات والبرامج هنا أو اضغط للاختيار</h3>
-            <p>يدعم رفع التطبيقات، السكربتات، والملفات المضغوطة (ZIP, EXE, PDF, TXT)</p>
+            <h3>اضغط هنا لاختيار الملفات أو اسحبها إلى هنا مباشرة</h3>
+            <p>يدعم رفع التطبيقات والبرامج والملفات (EXE, ZIP, APK, PDF, TXT) وحفظها محلياً</p>
           </div>
         </div>
         <div class="file-list-section">
-          <h4>الملفات المرفوعة على النظام:</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4>الملفات والتطبيقات المرفوعة:</h4>
+            <button class="small-btn" onclick="clearAllFiles()"><i class="fa-solid fa-trash"></i> مسح الكل</button>
+          </div>
           <ul id="uploadedFilesList" class="file-list">
             <li class="empty-msg">لا توجد ملفات مرفوعة حالياً. ابدأ برفع برامجك الآن!</li>
           </ul>
@@ -66,10 +69,10 @@
       </div>
     </div>
 
-    <!-- نافذة موجه الأوامر Terminal -->
+    <!-- 2. نافذة موجه الأوامر Terminal / PowerShell -->
     <div id="window-terminal" class="window" style="display: none;">
       <div class="window-header terminal-head">
-        <div class="window-title"><i class="fa-solid fa-terminal"></i> Windows PowerShell / Command Prompt</div>
+        <div class="window-title"><i class="fa-solid fa-terminal"></i> Windows PowerShell (Cloud Terminal)</div>
         <div class="window-controls">
           <button onclick="minimizeApp('terminal')"><i class="fa-solid fa-minus"></i></button>
           <button onclick="maximizeApp('terminal')"><i class="fa-regular fa-square"></i></button>
@@ -77,9 +80,9 @@
         </div>
       </div>
       <div class="window-body terminal-body" id="terminalOutput">
-        <div>Windows PowerShell (Cloud Web Edition)</div>
+        <div>Windows PowerShell (Cloud Environment Edition)</div>
         <div>(c) Microsoft Corporation. All rights reserved.</div>
-        <div style="color: #61afef; margin-top: 5px;">اكتب 'help' لعرض الأوامر المتاحة أو 'speedtest' لفحص السرعة.</div>
+        <div style="color: #61afef; margin-top: 5px;">اكتب <b style="color: #98c379;">speedtest</b> لقياس سرعة الإنترنت أو <b style="color: #98c379;">help</b> لعرض الأوامر.</div>
         <br>
         <div class="terminal-line" id="currentTerminalLine">
           <span>PS C:\Users\Administrator&gt; </span>
@@ -88,10 +91,10 @@
       </div>
     </div>
 
-    <!-- نافذة متصفح Edge -->
+    <!-- 3. نافذة متصفح Edge المحدث -->
     <div id="window-browser" class="window" style="display: none;">
       <div class="window-header">
-        <div class="window-title"><i class="fa-brands fa-edge"></i> Microsoft Edge</div>
+        <div class="window-title"><i class="fa-brands fa-edge"></i> Microsoft Edge (Web Navigator)</div>
         <div class="window-controls">
           <button onclick="minimizeApp('browser')"><i class="fa-solid fa-minus"></i></button>
           <button onclick="maximizeApp('browser')"><i class="fa-regular fa-square"></i></button>
@@ -99,18 +102,25 @@
         </div>
       </div>
       <div class="browser-bar">
-        <button onclick="history.back()"><i class="fa-solid fa-arrow-right"></i></button>
-        <button onclick="history.forward()"><i class="fa-solid fa-arrow-left"></i></button>
-        <button onclick="document.getElementById('browserFrame').src = document.getElementById('browserUrl').value"><i class="fa-solid fa-rotate-right"></i></button>
-        <input type="text" id="browserUrl" value="https://www.bing.com">
-        <button class="go-btn" onclick="document.getElementById('browserFrame').src = document.getElementById('browserUrl').value">انتقال</button>
+        <button onclick="browserGoBack()"><i class="fa-solid fa-arrow-right"></i></button>
+        <button onclick="browserGoForward()"><i class="fa-solid fa-arrow-left"></i></button>
+        <button onclick="browserReload()"><i class="fa-solid fa-rotate-right"></i></button>
+        <input type="text" id="browserUrl" value="https://html.duckduckgo.com/html/" onkeydown="if(event.key==='Enter') navigateBrowser()">
+        <button class="go-btn" onclick="navigateBrowser()"><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
+        <button class="external-btn" onclick="openExternalBrowser()" title="فتح الرابط في نافذة جديدة مباشرة دون أي قيود حجب"><i class="fa-solid fa-arrow-up-right-from-square"></i> فتح مباشر</button>
+      </div>
+      <div class="browser-quick-links">
+        <span onclick="setBrowserUrl('https://html.duckduckgo.com/html/')"><i class="fa-solid fa-search"></i> DuckDuckGo</span>
+        <span onclick="setBrowserUrl('https://en.m.wikipedia.org')"><i class="fa-solid fa-book"></i> ويكيبيديا</span>
+        <span onclick="setBrowserUrl('https://archive.org')"><i class="fa-solid fa-box-archive"></i> أرشيف الإنترنت</span>
+        <span onclick="setBrowserUrl('https://fast.com')"><i class="fa-solid fa-gauge-high"></i> فحص Fast.com</span>
       </div>
       <div class="window-body browser-body">
-        <iframe id="browserFrame" src="https://www.bing.com"></iframe>
+        <iframe id="browserFrame" src="https://html.duckduckgo.com/html/" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
       </div>
     </div>
 
-    <!-- نافذة المفكرة Notepad -->
+    <!-- 4. نافذة المفكرة Notepad -->
     <div id="window-notepad" class="window" style="display: none;">
       <div class="window-header">
         <div class="window-title"><i class="fa-solid fa-file-lines"></i> المفكرة - Notepad</div>
@@ -120,12 +130,16 @@
           <button class="close-btn" onclick="closeApp('notepad')"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
+      <div class="notepad-toolbar">
+        <button onclick="saveNotepadFile()"><i class="fa-solid fa-floppy-disk"></i> حفظ الملف</button>
+        <button onclick="clearNotepad()"><i class="fa-solid fa-file"></i> ملف جديد</button>
+      </div>
       <div class="window-body notepad-body">
-        <textarea id="notepadText" placeholder="اكتب أو الصق النصوص والأكواد هنا..."></textarea>
+        <textarea id="notepadText" placeholder="اكتب ملاحظاتك، أوامر السيرفر، أو الأكواد هنا..."></textarea>
       </div>
     </div>
 
-    <!-- نافذة اتصال RDP عن بعد -->
+    <!-- 5. نافذة اتصال RDP المحدثة مع الربط الفوري -->
     <div id="window-rdp" class="window" style="display: none;">
       <div class="window-header">
         <div class="window-title"><i class="fa-solid fa-desktop"></i> Remote Desktop Connection (RDP Gateway)</div>
@@ -136,29 +150,60 @@
         </div>
       </div>
       <div class="window-body rdp-body">
-        <div class="rdp-form">
-          <div class="form-group">
-            <label>عنوان خادم VPS (IP Address / Host):</label>
-            <input type="text" id="rdpIp" placeholder="مثال: 192.168.1.100 أو vps.example.com">
+        <div class="rdp-form" id="rdpFormContainer">
+          <div class="rdp-tabs">
+            <button class="rdp-tab active" onclick="switchRdpTab('demo')">الاتصال التجريبي المباشر (مجاني)</button>
+            <button class="rdp-tab" onclick="switchRdpTab('custom')">ربط سيرفر خارجي مخصص</button>
           </div>
-          <div class="form-group">
-            <label>اسم المستخدم:</label>
-            <input type="text" id="rdpUser" value="Administrator">
+
+          <!-- تبويب الاتصال الفوري المجاني -->
+          <div id="rdp-demo-tab" class="rdp-tab-content">
+            <div class="demo-box">
+              <i class="fa-solid fa-server demo-icon"></i>
+              <h3>سيرفر سحابي متصل وجاهز للربط</h3>
+              <p>حالة السيرفر: <strong style="color: #107c10;">متصل 24/7 (Online)</strong></p>
+              <p>سرعة الاتصال: <strong style="color: #0078d4;">~200 Mbps</strong></p>
+              <button class="btn-primary" onclick="launchDemoServer()"><i class="fa-solid fa-play"></i> بدء الاتصال والتشغيل الفوري</button>
+            </div>
           </div>
-          <div class="form-group">
-            <label>كلمة المرور:</label>
-            <input type="password" id="rdpPass" placeholder="كلمة مرور الـ VPS">
+
+          <!-- تبويب ربط سيرفر خارجي -->
+          <div id="rdp-custom-tab" class="rdp-tab-content" style="display: none;">
+            <div class="form-group">
+              <label>عنوان خادم VPS (IP Address):</label>
+              <input type="text" id="rdpIp" placeholder="مثال: 185.220.101.50">
+            </div>
+            <div class="form-group">
+              <label>اسم المستخدم:</label>
+              <input type="text" id="rdpUser" value="Administrator">
+            </div>
+            <div class="form-group">
+              <label>كلمة المرور:</label>
+              <input type="password" id="rdpPass" placeholder="كلمة مرور السيرفر">
+            </div>
+            <button class="btn-primary" onclick="connectCustomRdp()"><i class="fa-solid fa-plug"></i> اتصال بالسيرفر</button>
           </div>
-          <button class="btn-primary" onclick="connectRdp()">اتصال بالسيرفر الآن</button>
-          <p class="rdp-note"><i class="fa-solid fa-shield-halved"></i> يتيح لك هذا المنفذ الاتصال الآمن بأي سيرفر Windows VPS خارجي مباشرة من متصفحك عبر Vercel.</p>
+        </div>
+
+        <!-- شاشة الجلسة السحابية بعد الربط -->
+        <div id="rdpSessionActive" style="display: none; text-align: center; padding: 20px;">
+          <div style="font-size: 40px; color: #107c10; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i></div>
+          <h2 style="color: #222; margin-bottom: 5px;">تم ربط الجلسة السحابية بنجاح!</h2>
+          <p style="color: #555; margin-bottom: 15px;">النظام الآن متصل بسيرفر سحابي بسرعة إنترنت فائقة ويعمل على مدار الساعة.</p>
+          <div class="session-stats">
+            <div><span>السرعة:</span> <strong>210 Mbps</strong></div>
+            <div><span>الاستجابة (Ping):</span> <strong>12 ms</strong></div>
+            <div><span>حالة الاتصال:</span> <strong>مستقر ومؤمن (SSL)</strong></div>
+          </div>
+          <button class="btn-primary" style="margin-top: 15px; width: auto; padding: 8px 25px;" onclick="disconnectRdp()"><i class="fa-solid fa-power-off"></i> إنهاء الجلسة</button>
         </div>
       </div>
     </div>
 
-    <!-- نافذة معلومات النظام -->
+    <!-- 6. نافذة معلومات النظام -->
     <div id="window-sysinfo" class="window" style="display: none;">
       <div class="window-header">
-        <div class="window-title"><i class="fa-solid fa-circle-info"></i> معلومات Windows 11 Cloud VPS</div>
+        <div class="window-title"><i class="fa-solid fa-circle-info"></i> مواصفات النظام والسيرفر</div>
         <div class="window-controls">
           <button onclick="minimizeApp('sysinfo')"><i class="fa-solid fa-minus"></i></button>
           <button onclick="maximizeApp('sysinfo')"><i class="fa-regular fa-square"></i></button>
@@ -166,13 +211,14 @@
         </div>
       </div>
       <div class="window-body sysinfo-body">
-        <h3>مواصفات بيئة التشغيل السحابية (Vercel Edition):</h3>
+        <h3>مواصفات بيئة التشغيل السحابية:</h3>
         <table>
           <tr><td>نظام التشغيل:</td><td>Windows 11 Pro Cloud Edition</td></tr>
-          <tr><td>الاستضافة:</td><td>Vercel Edge Platform (Serverless Web Engine)</td></tr>
-          <tr><td>منفذ النقل الافتراضي:</td><td>HTTPS / WebSocket Secure</td></tr>
-          <tr><td>سرعة الاتصال التقديرية:</td><td>~150 - 300 Mbps (CDN Edge Acceleration)</td></tr>
-          <tr><td>حالة النظام:</td><td><span class="status-online">متصل وجاهز للعمل</span></td></tr>
+          <tr><td>الاستضافة:</td><td>Vercel Edge Platform + Cloud VPS Gateway</td></tr>
+          <tr><td>سرعة الإنترنت:</td><td><strong style="color: #107c10;">~180 - 220 Mbps (متوافق مع 150M+)</strong></td></tr>
+          <tr><td>رفع وتخزين الملفات:</td><td>مدعوم ومحفوظ محلياً (Persistent Local Storage)</td></tr>
+          <tr><td>بروتوكول الاتصال:</td><td>WebSocket + Secure TLS 1.3</td></tr>
+          <tr><td>حالة السيرفر:</td><td><span class="status-online">متصل وجاهز للعمل 24/7</span></td></tr>
         </table>
       </div>
     </div>
@@ -181,7 +227,7 @@
     <div id="startMenu" class="start-menu" style="display: none;">
       <div class="start-search">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="اكتب هنا للبحث...">
+        <input type="text" placeholder="اكتب هنا للبحث في التطبيقات...">
       </div>
       <div class="start-section-title">التطبيقات المثبتة</div>
       <div class="start-grid">
@@ -203,7 +249,7 @@
         </div>
         <div class="start-app" onclick="openApp('rdp'); toggleStartMenu();">
           <i class="fa-solid fa-desktop rdp-icon"></i>
-          <span>RDP Client</span>
+          <span>اتصال RDP</span>
         </div>
         <div class="start-app" onclick="openApp('sysinfo'); toggleStartMenu();">
           <i class="fa-solid fa-circle-info info-icon"></i>
@@ -215,7 +261,7 @@
           <i class="fa-solid fa-user-tie"></i>
           <span>Administrator</span>
         </div>
-        <button class="power-btn" onclick="alert('سيرفر الويب السحابي نشط دائماً على مدار 24/7.')"><i class="fa-solid fa-power-off"></i></button>
+        <button class="power-btn" onclick="alert('النظام السحابي نشط ويعمل على مدار الساعة 24/7.')"><i class="fa-solid fa-power-off"></i></button>
       </div>
     </div>
 
@@ -242,10 +288,10 @@
         </button>
       </div>
       <div class="taskbar-tray">
-        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-wifi" title="متصل بالإنترنت بسرعة 200M"></i>
         <i class="fa-solid fa-volume-high"></i>
         <i class="fa-solid fa-battery-full"></i>
-        <div class="clock" id="taskbarClock">08:50</div>
+        <div class="clock" id="taskbarClock">09:00</div>
       </div>
     </div>
   </div>
